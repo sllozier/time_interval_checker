@@ -11,7 +11,6 @@ import javafx.scene.layout.BorderStroke;
 import javafx.scene.layout.BorderStrokeStyle;
 import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -48,7 +47,7 @@ public class Project4 extends Application {
         GridPane gridPane = createGridPane();
         root.setCenter(gridPane);
 
-        Scene scene = new Scene(root, 500, 350);
+        Scene scene = new Scene(root, 500, 300);
         primaryStage.setScene(scene);
         primaryStage.setTitle("Time Interval Checker");
         primaryStage.show();
@@ -95,11 +94,6 @@ public class Project4 extends Application {
         textField4 = new TextField();
         addFocusListeners(textField4);
         GridPane.setConstraints(textField4, 2, 2);
-        intervalInfoField = new TextField();
-        intervalInfoField.setEditable(false);
-        GridPane.setConstraints(intervalInfoField, 0, 4);
-        GridPane.setColumnSpan(intervalInfoField, 3);
-        intervalInfoField.setMaxWidth(Double.MAX_VALUE);
         timeToCheckField = new TextField();
         addFocusListeners(timeToCheckField);
         GridPane.setConstraints(timeToCheckField, 1, 5, 2, 1);
@@ -109,7 +103,7 @@ public class Project4 extends Application {
         GridPane.setColumnSpan(overlapOutputField, 3);
         overlapOutputField.setMaxWidth(Double.MAX_VALUE);
         gridPane.getChildren().addAll(textField1, textField2, textField3, textField4, timeToCheckField,
-                intervalInfoField, overlapOutputField);
+                overlapOutputField);
     }
 
     private void createButtons(GridPane gridPane) {
@@ -136,53 +130,53 @@ public class Project4 extends Application {
                 new BorderStroke(Color.FIREBRICK, BorderStrokeStyle.SOLID, null, new BorderWidths(1))));
         addHoverEffects(clearButton);
         clearButton.setOnAction(event -> handleClearButtonAction());
-        GridPane.setConstraints(clearButton, 0, 8);
-        GridPane.setColumnSpan(clearButton, 3);
+        GridPane.setConstraints(clearButton, 2, 8);
         clearButton.setMaxWidth(Double.MAX_VALUE); // Make the button fill the width
         gridPane.getChildren().addAll(compareIntervalsButton, checkTimeButton, clearButton);
 
     }
 
-    private void handleCompareIntervalsButtonAction() {
-        // Retrieve start and end times from text fields
+    public void handleCompareIntervalsButtonAction() {
+        // Retrieve the input values for both intervals
         String startTimeStr1 = textField1.getText().trim();
         String endTimeStr1 = textField2.getText().trim();
         String startTimeStr2 = textField3.getText().trim();
         String endTimeStr2 = textField4.getText().trim();
 
-        // Check if any of the fields are empty
-        if (startTimeStr1.isEmpty() || endTimeStr1.isEmpty() ||
-                startTimeStr2.isEmpty() || endTimeStr2.isEmpty()) {
-            intervalInfoField.setText("Please enter start and end times for both intervals.");
-            return;
-        }
-
-        // Parse start and end times
         try {
-            Time startTime1 = new Time(startTimeStr1);
-            Time endTime1 = new Time(endTimeStr1);
-            Time startTime2 = new Time(startTimeStr2);
-            Time endTime2 = new Time(endTimeStr2);
+            // Parse the input strings into Time objects
+            Time interval1Start = new Time(startTimeStr1);
+            Time interval1End = new Time(endTimeStr1);
+            Time interval2Start = new Time(startTimeStr2);
+            Time interval2End = new Time(endTimeStr2);
 
-            System.out.println("INTERVAL 1:" + startTimeStr1 + endTimeStr1);
-            System.out.println("INTERVAL 2:" + startTimeStr2 + endTimeStr2);
+            // Create Interval objects for both intervals
+            Interval<Time> interval1 = new Interval<>(interval1Start, interval1End);
+            Interval<Time> interval2 = new Interval<>(interval2Start, interval2End);
 
-            // Create Interval objects
-            Interval<Time> interval1 = new Interval<>(startTime1, endTime1);
-            Interval<Time> interval2 = new Interval<>(startTime2, endTime2);
+            // Step 1: Check for Overlapping Intervals
+            boolean overlap = interval1.overlaps(interval2) || interval2.overlaps(interval1);
+            // boolean overlap2 = interval2.overlaps(interval1);
 
-            // Compare intervals and set appropriate message
-            if (interval1.subinterval(interval2)) {
-                intervalInfoField.setText("Interval 1 is a sub-interval of interval 2");
-            } else if (interval2.subinterval(interval1)) {
-                intervalInfoField.setText("Interval 2 is a sub-interval of interval 1");
-            } else if (interval1.overlaps(interval2)) {
-                intervalInfoField.setText("The intervals overlap");
+            // Step 2: Check for Subintervals
+            boolean subinterval1 = interval1.subinterval(interval2);
+            boolean subinterval2 = interval2.subinterval(interval1);
+
+            // Check for subintervals first
+            if (subinterval1) {
+                overlapOutputField.setText("Interval 2 is a sub-interval of interval 1");
+            } else if (subinterval2) {
+                overlapOutputField.setText("Interval 1 is a sub-interval of interval 2");
+            } else if (overlap) {
+                // Then check for overlapping if no subinterval relationship exists
+                overlapOutputField.setText("The intervals overlap");
             } else {
-                intervalInfoField.setText("The intervals are disjoint");
+                overlapOutputField.setText("The intervals are disjoint");
             }
+
         } catch (InvalidTime e) {
-            intervalInfoField.setText("Invalid time format or values. Use HH:MM AM/PM");
+            // Handle invalid time input
+            overlapOutputField.setText("Invalid time format or values. Use HH:MM AM/PM");
         }
     }
 
@@ -212,6 +206,7 @@ public class Project4 extends Application {
             Time startTime2 = new Time(startTimeStr2);
             Time endTime2 = new Time(endTimeStr2);
 
+            System.out.println("Comparing intervals...");
             // Create Interval objects
             Interval<Time> interval1 = new Interval<>(startTime1, endTime1);
             Interval<Time> interval2 = new Interval<>(startTime2, endTime2);
@@ -219,6 +214,9 @@ public class Project4 extends Application {
             // Check if the time is within the intervals
             boolean inInterval1 = interval1.within(timeToCheck);
             boolean inInterval2 = interval2.within(timeToCheck);
+
+            System.out.println("Result of comparison 1: " + inInterval1);
+            System.out.println("Result of comparison 2: " + inInterval2);
 
             // Generate output message based on the results
             if (inInterval1 && inInterval2) {
@@ -236,7 +234,18 @@ public class Project4 extends Application {
     }
 
     private void handleClearButtonAction() {
-        // Implement action for Check Time Button
+        // Clear the text fields for interval inputs
+        textField1.setText("");
+        textField2.setText("");
+        textField3.setText("");
+        textField4.setText("");
+
+        // Clear the text field for the time check input
+        timeToCheckField.setText("");
+
+        // Clear the output fields for interval comparison and time check results
+        intervalInfoField.setText("");
+        overlapOutputField.setText("");
     }
 
     // Method to add focus listeners to highlight text fields when focused
