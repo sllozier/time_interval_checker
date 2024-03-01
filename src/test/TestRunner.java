@@ -42,8 +42,9 @@ public class TestRunner extends Application {
         System.out.println("|");
 
         // Call test methods from different test classes
-        // runTripCostTest();
-        // runProject3Test();
+        runTimeTest();
+        runInvalidTimeTest();
+        runIntervalTest();
 
         // Restore standard error
         System.setErr(originalErr);
@@ -57,25 +58,69 @@ public class TestRunner extends Application {
         Platform.exit();
     }
 
-    // Executes and reports on TripCost class tests
-    // private static void runTripCostTest() {
-    // System.out.println("|+-- TripCostTest");
+    // Executes and reports on Time class tests
+    private static void runTimeTest() {
+        System.out.println("|+-- TimeTest");
 
-    // // Execute and display results for TripCost specific tests
-    // double executionTime1 = executeTest("testCalculateTotalTripCostFromJson");
-    // double executionTime2 = executeTest("testNegativeGasMileage");
-    // boolean result1 = TripCostTest.testCalculateTotalTripCostFromJson();
-    // boolean result2 = TripCostTest.testNegativeGasMileage();
+        // Execute and display results for TripCost specific tests
+        double executionTime1 = executeTest("testCreateTimeValid");
+        double executionTime2 = executeTest("testCompareTime");
+        double executionTime3 = executeTest("testCreateTimeInvalid");
+        boolean result1 = TimeTest.testCreateTimeValid();
+        boolean result2 = TimeTest.testCompareTime();
+        boolean result3 = TimeTest.testCreateTimeInvalid();
 
-    // // Report on each test's execution time and result
-    // System.out.println("|");
+        // Report on each test's execution time and result
+        System.out.println("|");
 
-    // // Calculate and display execution times
-    // displayExecutionTime("testCalculateTotalTripCostFromJson", executionTime1,
-    // result1);
-    // displayExecutionTime("testNegativeGasMileage", executionTime2, result2);
-    // System.out.println("|");
-    // }
+        // Calculate and display execution times
+        displayExecutionTime("testCreateTimeValid", executionTime1,
+                result1);
+        displayExecutionTime("testCompareTime", executionTime2, result2);
+        displayExecutionTime("testCreateTimeInvalid", executionTime3, result3);
+        System.out.println("|");
+    }
+
+    // Executes and reports on InvalidTime class tests
+    private static void runInvalidTimeTest() {
+        System.out.println("|+-- InvalidTimeTest");
+
+        // Execute and display results for TripCost specific tests
+        double executionTime1 = executeTest("testInvalidTimeWithMessage");
+        boolean result1 = InvalidTimeTest.testInvalidTimeWithMessage();
+
+        // Report on each test's execution time and result
+        System.out.println("|");
+
+        // Calculate and display execution times
+        displayExecutionTime("testInvalidTimeWithMessage", executionTime1,
+                result1);
+
+        System.out.println("|");
+    }
+
+    // Executes and reports on Interval class tests
+    private static void runIntervalTest() {
+        System.out.println("|+-- InervalTest");
+
+        // Execute and display results for TripCost specific tests
+        double executionTime1 = executeTest("testObjectWithinInterval");
+        double executionTime2 = executeTest("testSubinterval");
+        double executionTime3 = executeTest("testIntervalOverlaps");
+        boolean result1 = IntervalTest.testObjectWithinInterval();
+        boolean result2 = IntervalTest.testSubinterval();
+        boolean result3 = IntervalTest.testIntervalOverlaps();
+
+        // Report on each test's execution time and result
+        System.out.println("|");
+
+        // Calculate and display execution times
+        displayExecutionTime("testObjectWithinInterval", executionTime1,
+                result1);
+        displayExecutionTime("testSubinterval", executionTime2, result2);
+        displayExecutionTime("testIntervalOverlaps", executionTime3, result3);
+        System.out.println("|");
+    }
 
     // Executes and reports on Project3 class tests
     // private static void runProject3Test() {
@@ -107,21 +152,27 @@ public class TestRunner extends Application {
 
         // Execute the corresponding test method
         switch (testName) {
-            // case "testCalculateTotalTripCostFromJson":
-            // result = TripCostTest.testCalculateTotalTripCostFromJson();
-            // break;
-            // case "testNegativeGasMileage":
-            // result = TripCostTest.testNegativeGasMileage();
-            // break;
-            // case "testPositiveScenario":
-            // result = Project4Test.testPositiveScenario();
-            // break;
-            // case "testTextFieldExceptions":
-            // result = Project3Test.testTextFieldExceptions();
-            // break;
-            // case "testComboBoxExceptions":
-            // result = Project3Test.testComboBoxExceptions();
-            // break;
+            case "testCreateTimeValid":
+                result = TimeTest.testCreateTimeValid();
+                break;
+            case "testCompareTime":
+                result = TimeTest.testCompareTime();
+                break;
+            case "testCreateTimeInvalid":
+                result = TimeTest.testCreateTimeInvalid();
+                break;
+            case "testInvalidTimeWithMessage":
+                result = InvalidTimeTest.testInvalidTimeWithMessage();
+                break;
+            case "testObjectWithinInterval":
+                result = IntervalTest.testObjectWithinInterval();
+                break;
+            case "testSubinterval":
+                result = IntervalTest.testSubinterval();
+                break;
+            case "testIntervalOverlaps":
+                result = IntervalTest.testIntervalOverlaps();
+                break;
         }
 
         // Get the current time after the test

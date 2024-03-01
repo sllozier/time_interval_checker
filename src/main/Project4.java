@@ -22,12 +22,11 @@ import javafx.stage.Stage;
  * Project: Project 4
  * Date: March 5th, 2024
  * Description: Project4 class implements a GUI interface for comparing time
- * intervals and checking if a given time is within the intervals.
- * It contains two buttons: "Compare Intervals" and "Check Time" which perform
- * the respective operations and display the results.
- * The GUI layout includes text fields for inputting start and end times of two
- * intervals, a text field for entering a time to check,
- * and a label to display the output messages.
+ * intervals and checking if a given time is within those intervals.
+ * This class provides functionality through a user interface with text fields
+ * for inputting start and end times
+ * of two intervals, a field for entering a time to check, and buttons for
+ * performing the checks.
  */
 public class Project4 extends Application {
 
@@ -36,9 +35,14 @@ public class Project4 extends Application {
     private TextField textField3;
     private TextField textField4;
     private TextField timeToCheckField;
-    private TextField intervalInfoField;
     private TextField overlapOutputField;
 
+    /**
+     * Starts the application and sets up the primary stage with its scene and
+     * layout.
+     * 
+     * @param primaryStage the primary stage for this application
+     */
     @Override
     public void start(Stage primaryStage) {
         BorderPane root = new BorderPane();
@@ -53,6 +57,12 @@ public class Project4 extends Application {
         primaryStage.show();
     }
 
+    /**
+     * Creates and configures the main grid pane layout including labels, fields,
+     * and buttons.
+     * 
+     * @return the configured GridPane instance
+     */
     private GridPane createGridPane() {
         GridPane gridPane = new GridPane();
         gridPane.setAlignment(Pos.CENTER);
@@ -66,76 +76,122 @@ public class Project4 extends Application {
         return gridPane;
     }
 
+    /**
+     * Creates and places labels in the grid pane.
+     * 
+     * @param gridPane the GridPane to add labels to
+     */
     private void createLabels(GridPane gridPane) {
+
+        // Create an array of strings to be used in each label
         String[] labels = { "Start Time", "End Time", "Time Interval 1", "Time Interval 2", "Time to Check" };
+
+        // Create arrays to hold the placement values of each label in the grid pane
         int[] rows = { 0, 0, 1, 2, 5 };
         int[] cols = { 1, 2, 0, 0, 0 };
+
+        // Loop over the labels array
         for (int i = 0; i < labels.length; i++) {
+
+            // Create a new label for each string in the labels array
             Label label = new Label(labels[i]);
-            label.setFont(Font.font("Arial", 12)); // Set font size if needed
+
+            // Set font size for each label
+            label.setFont(Font.font("Arial", 12));
+
+            // Create a stack pane to assist in laying out our labels in order and add them
             StackPane stackPane = new StackPane();
             stackPane.getChildren().add(label);
+
+            // Align and place the stack pane appropriately in the grid pane
             StackPane.setAlignment(label, Pos.CENTER);
-            GridPane.setConstraints(stackPane, cols[i], rows[i]);
-            gridPane.getChildren().add(stackPane);
+
+            // Add stack pane to grid pane with proper placements and span values
+            gridPane.add(stackPane, cols[i], rows[i]);
         }
     }
 
+    /**
+     * Creates and configures text fields for user input, adding them to the grid
+     * pane.
+     * 
+     * @param gridPane the GridPane to add fields to
+     */
     private void createFields(GridPane gridPane) {
+
+        // Create text fields
         textField1 = new TextField();
-        addFocusListeners(textField1);
-        GridPane.setConstraints(textField1, 1, 1);
         textField2 = new TextField();
-        addFocusListeners(textField2);
-        GridPane.setConstraints(textField2, 2, 1);
         textField3 = new TextField();
-        addFocusListeners(textField3);
-        GridPane.setConstraints(textField3, 1, 2);
         textField4 = new TextField();
-        addFocusListeners(textField4);
-        GridPane.setConstraints(textField4, 2, 2);
         timeToCheckField = new TextField();
-        addFocusListeners(timeToCheckField);
-        GridPane.setConstraints(timeToCheckField, 1, 5, 2, 1);
         overlapOutputField = new TextField();
+
+        // Special settings for the output field
         overlapOutputField.setEditable(false);
-        GridPane.setConstraints(overlapOutputField, 0, 7);
-        GridPane.setColumnSpan(overlapOutputField, 3);
         overlapOutputField.setMaxWidth(Double.MAX_VALUE);
-        gridPane.getChildren().addAll(textField1, textField2, textField3, textField4, timeToCheckField,
-                overlapOutputField);
+
+        // Add focus listeners to the editable fields
+        addFocusListeners(textField1);
+        addFocusListeners(textField2);
+        addFocusListeners(textField3);
+        addFocusListeners(textField4);
+        addFocusListeners(timeToCheckField);
+
+        // Add each text field to the grid pane with proper placements and span values
+        gridPane.add(textField1, 1, 1);
+        gridPane.add(textField2, 2, 1);
+        gridPane.add(textField3, 1, 2);
+        gridPane.add(textField4, 2, 2);
+        gridPane.add(timeToCheckField, 1, 5, 2, 1);
+        gridPane.add(overlapOutputField, 0, 7, 3, 1);
     }
 
+    /**
+     * Creates and adds buttons to the grid pane, setting their actions.
+     * 
+     * @param gridPane the GridPane to add buttons to
+     */
     private void createButtons(GridPane gridPane) {
+
+        // Create each button
         Button compareIntervalsButton = new Button("Compare Intervals");
+        Button checkTimeButton = new Button("Check Time");
+        Button clearButton = new Button("Clear Fields");
+
+        // Set button borders
         compareIntervalsButton.setBorder(new Border(
                 new BorderStroke(Color.ROYALBLUE, BorderStrokeStyle.SOLID, null, new BorderWidths(1))));
-        addHoverEffects(compareIntervalsButton);
-        compareIntervalsButton.setOnAction(event -> handleCompareIntervalsButtonAction());
-        GridPane.setConstraints(compareIntervalsButton, 0, 3);
-        GridPane.setColumnSpan(compareIntervalsButton, 3);
-        compareIntervalsButton.setMaxWidth(Double.MAX_VALUE); // Make the button fill the width
-
-        Button checkTimeButton = new Button("Check Time");
         checkTimeButton.setBorder(new Border(
                 new BorderStroke(Color.GREEN, BorderStrokeStyle.SOLID, null, new BorderWidths(1))));
-        addHoverEffects(checkTimeButton);
-        checkTimeButton.setOnAction(event -> handleCheckTimeButtonAction());
-        GridPane.setConstraints(checkTimeButton, 0, 6);
-        GridPane.setColumnSpan(checkTimeButton, 3);
-        checkTimeButton.setMaxWidth(Double.MAX_VALUE); // Make the button fill the width
-
-        Button clearButton = new Button("Clear Fields");
         clearButton.setBorder(new Border(
                 new BorderStroke(Color.FIREBRICK, BorderStrokeStyle.SOLID, null, new BorderWidths(1))));
-        addHoverEffects(clearButton);
-        clearButton.setOnAction(event -> handleClearButtonAction());
-        GridPane.setConstraints(clearButton, 2, 8);
-        clearButton.setMaxWidth(Double.MAX_VALUE); // Make the button fill the width
-        gridPane.getChildren().addAll(compareIntervalsButton, checkTimeButton, clearButton);
 
+        // Make the button fill the width
+        compareIntervalsButton.setMaxWidth(Double.MAX_VALUE);
+        checkTimeButton.setMaxWidth(Double.MAX_VALUE);
+        clearButton.setMaxWidth(Double.MAX_VALUE);
+
+        // Add hover effect to each button
+        addHoverEffects(compareIntervalsButton);
+        addHoverEffects(checkTimeButton);
+        addHoverEffects(clearButton);
+
+        // Button event handlers
+        compareIntervalsButton.setOnAction(event -> handleCompareIntervalsButtonAction());
+        checkTimeButton.setOnAction(event -> handleCheckTimeButtonAction());
+        clearButton.setOnAction(event -> handleClearButtonAction());
+
+        // Add each button to the grid pane with proper placements and span values
+        gridPane.add(compareIntervalsButton, 0, 3, 3, 1);
+        gridPane.add(checkTimeButton, 0, 6, 3, 1);
+        gridPane.add(clearButton, 2, 8);
     }
 
+    /**
+     * Handles the action for the "Compare Intervals" button.
+     * Compares two time intervals inputted by the user and displays the result.
+     */
     public void handleCompareIntervalsButtonAction() {
         // Retrieve the input values for both intervals
         String startTimeStr1 = textField1.getText().trim();
@@ -180,6 +236,11 @@ public class Project4 extends Application {
         }
     }
 
+    /**
+     * Handles the action for the "Check Time" button.
+     * Checks if a given time is within the inputted time intervals and displays the
+     * result.
+     */
     private void handleCheckTimeButtonAction() {
         // Retrieve time to check from the text field
         String timeToCheckStr = timeToCheckField.getText().trim();
@@ -206,7 +267,6 @@ public class Project4 extends Application {
             Time startTime2 = new Time(startTimeStr2);
             Time endTime2 = new Time(endTimeStr2);
 
-            System.out.println("Comparing intervals...");
             // Create Interval objects
             Interval<Time> interval1 = new Interval<>(startTime1, endTime1);
             Interval<Time> interval2 = new Interval<>(startTime2, endTime2);
@@ -214,9 +274,6 @@ public class Project4 extends Application {
             // Check if the time is within the intervals
             boolean inInterval1 = interval1.within(timeToCheck);
             boolean inInterval2 = interval2.within(timeToCheck);
-
-            System.out.println("Result of comparison 1: " + inInterval1);
-            System.out.println("Result of comparison 2: " + inInterval2);
 
             // Generate output message based on the results
             if (inInterval1 && inInterval2) {
@@ -233,22 +290,25 @@ public class Project4 extends Application {
         }
     }
 
+    /**
+     * Handles the action for the "Clear Fields" button.
+     * Clears all input and output fields.
+     */
     private void handleClearButtonAction() {
-        // Clear the text fields for interval inputs
+        // Clear all text fields
         textField1.setText("");
         textField2.setText("");
         textField3.setText("");
         textField4.setText("");
-
-        // Clear the text field for the time check input
         timeToCheckField.setText("");
-
-        // Clear the output fields for interval comparison and time check results
-        intervalInfoField.setText("");
         overlapOutputField.setText("");
     }
 
-    // Method to add focus listeners to highlight text fields when focused
+    /**
+     * Adds focus listeners to text fields to highlight them when focused.
+     * 
+     * @param textField the TextField to add a focus listener to
+     */
     private void addFocusListeners(TextField textField) {
         // Set default border
         textField.setBorder(
@@ -266,11 +326,15 @@ public class Project4 extends Application {
         });
     }
 
-    // Method to add hover effects to buttons and combo boxes
+    /**
+     * Adds hover effects to buttons, changing their border color when hovered.
+     * 
+     * @param control the Control (Button) to add hover effects to
+     */
     private void addHoverEffects(Control control) {
         // Add hover effect to change border color
         control.setOnMouseEntered(e -> {
-            Button button = (Button) control; // Cast to Button
+            Button button = (Button) control;
             if (button.getText().equals("Clear Fields")) {
                 control.setBorder(new Border(new BorderStroke(Color.FIREBRICK.brighter(), BorderStrokeStyle.SOLID,
                         null, new BorderWidths(1))));
@@ -284,7 +348,7 @@ public class Project4 extends Application {
         });
         // Reset border color on mouse exit
         control.setOnMouseExited(e -> {
-            Button button = (Button) control; // Cast to Button
+            Button button = (Button) control;
             if (button.getText().equals("Clear Fields")) {
                 control.setBorder(new Border(
                         new BorderStroke(Color.FIREBRICK, BorderStrokeStyle.SOLID, null, new BorderWidths(1))));

@@ -22,6 +22,7 @@ SOURCES = $(SRC_DIR)/Project4.java \
           $(SRC_DIR)/Interval.java \
 		  $(SRC_DIR)/Time.java \
 		  $(SRC_DIR)/InvalidTime.java \
+		  $(TEST_DIR)/GenerateTimeData.java \
           $(TEST_DIR)/Project4Test.java \
           $(TEST_DIR)/IntervalTest.java \
           $(TEST_DIR)/TimeTest.java \
@@ -38,7 +39,7 @@ compile:
 
 # Rule to generate JSON file
 generate_json_file: compile
-	cd $(BIN_DIR) && $(JVM) --module-path "../$(LIB_DIR)" --add-modules javafx.controls,javafx.fxml -cp .:../$(SRC_DIR) test.GenerateTripData
+	cd $(BIN_DIR) && $(JVM) --module-path "../$(LIB_DIR)" --add-modules javafx.controls,javafx.fxml -cp .:../$(SRC_DIR) test.GenerateTimeData
 
 # Rule to compile and run tests
 run_tests: generate_json_file
@@ -48,7 +49,7 @@ run_tests: generate_json_file
 
 # Rule to compile and run project
 run_project: generate_json_file
-	cd $(BIN_DIR) && $(JVM) --module-path "../$(LIB_DIR)" --add-modules javafx.controls,javafx.fxml -cp .:../$(SRC_DIR) main.Project3
+	cd $(BIN_DIR) && $(JVM) --module-path "../$(LIB_DIR)" --add-modules javafx.controls,javafx.fxml -cp .:../$(SRC_DIR) main.Project4
 
 # Rule to clean up
 clean:
