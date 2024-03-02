@@ -5,12 +5,14 @@ package test;
  * Class: CMSC 215 - 6380
  * Project: Project 4
  * Date: March 5th, 2024
- * Description:
+ * Description: This class is designed to test the functionality of the Time class. It includes 
+ * methods to validate the creation of Time objects with both valid and invalid inputs, and to compare
+ * the order of two Time objects. The tests ensure that Time objects are correctly instantiated and 
+ * compared according to the 12-hour clock format.
  */
 
 import main.Time;
 import main.InvalidTime;
-
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -19,6 +21,11 @@ import java.util.List;
 
 public class TimeTest {
 
+    /**
+     * Main method to run all tests related to the Time class.
+     * 
+     * @param args Command line arguments (not used).
+     */
     public static void main(String[] args) {
 
         System.out.println("Test Create Time Valid: " + (testCreateTimeValid() ? "Passed" : "Failed"));
@@ -26,6 +33,14 @@ public class TimeTest {
         System.out.println("Test Create Time Invalid: " + (testCreateTimeInvalid() ? "Passed" : "Failed"));
     }
 
+    /**
+     * Parses JSON data to extract either valid or invalid time strings.
+     * 
+     * @param jsonData The string containing JSON data.
+     * @param valid    A boolean indicating whether to extract valid or invalid
+     *                 times.
+     * @return A list of time strings extracted from the JSON data.
+     */
     private static List<String> parseJsonData(String jsonData, boolean valid) {
         List<String> times = new ArrayList<>();
         try {
@@ -53,30 +68,44 @@ public class TimeTest {
         return times;
     }
 
-    // Positive Test 1: Test creating a valid Time object
+    /**
+     * Tests the creation of Time objects with valid time strings.
+     * Validates that no InvalidTime exceptions are thrown for valid inputs.
+     * 
+     * @return true if all valid times are correctly instantiated, false otherwise.
+     */
     public static boolean testCreateTimeValid() {
         Path jsonFilePath = Paths.get("time.json");
         try {
             String jsonData = new String(Files.readAllBytes(jsonFilePath));
-            List<String> validTimes = parseJsonData(jsonData, true); // Assume true for valid times
+            // Assume true for valid times
+            List<String> validTimes = parseJsonData(jsonData, true);
             boolean passed = true;
             for (String validTime : validTimes) {
                 try {
-                    new Time(validTime); // Attempt to create a Time object
+                    // Attempt to create a Time object
+                    new Time(validTime);
                 } catch (InvalidTime e) {
                     System.out.println("Test failed for supposedly valid time string: " + validTime);
                     passed = false;
-                    break; // Exit the loop on first failure
+                    // Exit the loop on first failure
+                    break;
                 }
             }
             return passed;
         } catch (Exception e) {
             e.printStackTrace();
-            return false; // Return false if any error occurs reading the file or parsing data
+            // Return false if any error occurs reading the file or parsing data
+            return false;
         }
     }
 
-    // Positive Test 2: Test comparing two Time objects
+    /**
+     * Tests the comparison of two Time objects to ensure correct ordering.
+     * Validates that Time.compareTo() method correctly identifies the order.
+     * 
+     * @return true if the comparison logic is correct, false otherwise.
+     */
     public static boolean testCompareTime() {
         try {
             Boolean passed = true;
@@ -98,7 +127,13 @@ public class TimeTest {
         }
     }
 
-    // Negative Test: Test creating a Time object with invalid hour
+    /**
+     * Tests the creation of Time objects with invalid time strings.
+     * Validates that an InvalidTime exception is thrown for each invalid input.
+     * 
+     * @return true if all invalid times correctly throw InvalidTime exceptions,
+     *         false otherwise.
+     */
     public static boolean testCreateTimeInvalid() {
         try {
             String jsonData = new String(Files.readAllBytes(Paths.get("time.json")));
@@ -108,12 +143,14 @@ public class TimeTest {
                 try {
                     new Time(invalidTime);
                     System.out.println("An invalid time did not throw InvalidTime: " + invalidTime);
-                    return false; // An invalid time should throw an exception, so we return false here
+                    // An invalid time should throw an exception, so we return false here
+                    return false;
                 } catch (InvalidTime e) {
                     // This is expected for invalid times
                 }
             }
-            return true; // All invalid times correctly threw exceptions
+            // All invalid times correctly threw exceptions
+            return true;
         } catch (Exception e) {
             System.out.println("Error during testCreateTimeInvalid: " + e.getMessage());
             return false;

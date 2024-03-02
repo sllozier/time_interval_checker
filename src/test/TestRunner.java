@@ -23,12 +23,23 @@ public class TestRunner extends Application {
     private static final String ANSI_GREEN = "\u001B[32m";
     private static final String ANSI_RED = "\u001B[31m";
 
-    // Launch the JavaFX application
+    /**
+     * Launches the JavaFX application to run the tests.
+     * 
+     * @param args Command line arguments passed to the application.
+     */
     public static void main(String[] args) {
 
         launch(args);
     }
 
+    /**
+     * Initializes the JavaFX stage and runs all test suites, displaying their
+     * results.
+     * It overrides the JavaFX Application's start method.
+     * 
+     * @param primaryStage The primary stage for this application.
+     */
     @Override
     public void start(Stage primaryStage) {
         // Suppress standard error
@@ -45,6 +56,7 @@ public class TestRunner extends Application {
         runTimeTest();
         runInvalidTimeTest();
         runIntervalTest();
+        runProject4Test();
 
         // Restore standard error
         System.setErr(originalErr);
@@ -58,7 +70,10 @@ public class TestRunner extends Application {
         Platform.exit();
     }
 
-    // Executes and reports on Time class tests
+    /**
+     * Executes and reports on Time class tests. It displays the result and
+     * execution time for each test.
+     */
     private static void runTimeTest() {
         System.out.println("|+-- TimeTest");
 
@@ -81,7 +96,10 @@ public class TestRunner extends Application {
         System.out.println("|");
     }
 
-    // Executes and reports on InvalidTime class tests
+    /**
+     * Executes and reports on InvalidTime class tests. It displays the result and
+     * execution time for each test.
+     */
     private static void runInvalidTimeTest() {
         System.out.println("|+-- InvalidTimeTest");
 
@@ -99,9 +117,12 @@ public class TestRunner extends Application {
         System.out.println("|");
     }
 
-    // Executes and reports on Interval class tests
+    /**
+     * Executes and reports on Interval class tests. It displays the result and
+     * execution time for each test.
+     */
     private static void runIntervalTest() {
-        System.out.println("|+-- InervalTest");
+        System.out.println("|+-- IntervalTest");
 
         // Execute and display results for TripCost specific tests
         double executionTime1 = executeTest("testObjectWithinInterval");
@@ -122,29 +143,35 @@ public class TestRunner extends Application {
         System.out.println("|");
     }
 
-    // Executes and reports on Project3 class tests
-    // private static void runProject3Test() {
-    // System.out.println("|+-- Project3Test");
+    /**
+     * Executes and reports on Project4 class tests. It displays the result and
+     * execution time for each test.
+     */
+    private static void runProject4Test() {
+        System.out.println("|+-- Project4Test");
 
-    // // Execute and display results for Project3 specific tests
-    // double executionTime1 = executeTest("testPositiveScenario");
-    // double executionTime2 = executeTest("testTextFieldExceptions");
-    // double executionTime3 = executeTest("testComboBoxExceptions");
-    // boolean result1 = Project3Test.testPositiveScenario();
-    // boolean result2 = Project3Test.testTextFieldExceptions();
-    // boolean result3 = Project3Test.testComboBoxExceptions();
+        // Execute and display results for TripCost specific tests
+        double executionTime1 = executeTest("testValidInputs");
+        double executionTime2 = executeTest("testInvalidInputs");
+        boolean result1 = Project4Test.testValidInputs();
+        boolean result2 = Project4Test.testInvalidInputs();
 
-    // // Report on each test's execution time and result
-    // System.out.println("|");
+        // Report on each test's execution time and result
+        System.out.println("|");
 
-    // // Calculate and display execution times
-    // displayExecutionTime("testPositiveScenario", executionTime1, result1);
-    // displayExecutionTime("testTextFieldExceptions", executionTime2, result2);
-    // displayExecutionTime("testComboBoxExceptions", executionTime3, result3);
-    // System.out.println("|");
-    // }
+        // Calculate and display execution times
+        displayExecutionTime("testValidInputs", executionTime1,
+                result1);
+        displayExecutionTime("testInvalidInputs", executionTime2, result2);
+        System.out.println("|");
+    }
 
-    // Executes a test and returns the execution time
+    /**
+     * Executes a specified test method and calculates its execution time.
+     * 
+     * @param testName The name of the test method to execute.
+     * @return The execution time of the test method in seconds.
+     */
     private static double executeTest(String testName) {
         // Record start time, execute test, then calculate duration
         long startTime = System.currentTimeMillis();
@@ -173,6 +200,12 @@ public class TestRunner extends Application {
             case "testIntervalOverlaps":
                 result = IntervalTest.testIntervalOverlaps();
                 break;
+            case "testValidInputs":
+                result = Project4Test.testValidInputs();
+                break;
+            case "testInvalidInputs":
+                result = Project4Test.testInvalidInputs();
+                break;
         }
 
         // Get the current time after the test
@@ -182,7 +215,13 @@ public class TestRunner extends Application {
         return executionTime;
     }
 
-    // Displays the execution time and result of a test
+    /**
+     * Displays the execution time and result of a specified test.
+     * 
+     * @param testName      The name of the test method.
+     * @param executionTime The execution time of the test method in seconds.
+     * @param result        The result of the test (pass or fail).
+     */
     private static void displayExecutionTime(String testName, double executionTime, boolean result) {
         if (executionTime >= 0) {
             String resultString = (result == true) ? ANSI_GREEN + "[OK]" : ANSI_RED + "[FAILED]";

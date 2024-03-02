@@ -1,5 +1,18 @@
 package main;
 
+/**
+ * Name: Sarah L. Lozier
+ * Class: CMSC 215 - 6380
+ * Project: Project 4
+ * Date: March 5th, 2024
+ * Description: Project4 class implements a GUI interface for comparing time
+ * intervals and checking if a given time is within those intervals.
+ * This class provides functionality through a user interface with text fields
+ * for inputting start and end times
+ * of two intervals, a field for entering a time to check, and buttons for
+ * performing the checks.
+ */
+
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -16,18 +29,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
-/**
- * Name: Sarah L. Lozier
- * Class: CMSC 215 - 6380
- * Project: Project 4
- * Date: March 5th, 2024
- * Description: Project4 class implements a GUI interface for comparing time
- * intervals and checking if a given time is within those intervals.
- * This class provides functionality through a user interface with text fields
- * for inputting start and end times
- * of two intervals, a field for entering a time to check, and buttons for
- * performing the checks.
- */
 public class Project4 extends Application {
 
     private TextField textField1;
@@ -178,8 +179,13 @@ public class Project4 extends Application {
         addHoverEffects(clearButton);
 
         // Button event handlers
-        compareIntervalsButton.setOnAction(event -> handleCompareIntervalsButtonAction());
-        checkTimeButton.setOnAction(event -> handleCheckTimeButtonAction());
+        compareIntervalsButton.setOnAction(
+                event -> handleCompareIntervalsButtonAction(textField1, textField2, textField3, textField4,
+                        overlapOutputField, true));
+        checkTimeButton.setOnAction(
+                event -> handleCheckTimeButtonAction(textField1, textField2, textField3, textField4, timeToCheckField,
+                        overlapOutputField,
+                        true));
         clearButton.setOnAction(event -> handleClearButtonAction());
 
         // Add each button to the grid pane with proper placements and span values
@@ -189,15 +195,29 @@ public class Project4 extends Application {
     }
 
     /**
-     * Handles the action for the "Compare Intervals" button.
      * Compares two time intervals inputted by the user and displays the result.
+     * This method handles the action for the "Compare Intervals" button.
+     * 
+     * @param textField1         First start time input field
+     * @param textField2         First end time input field
+     * @param textField3         Second start time input field
+     * @param textField4         Second end time input field
+     * @param overlapOutputField Field to display the result of comparison
+     * @param displayAlerts      Whether to display alerts for invalid input
      */
-    public void handleCompareIntervalsButtonAction() {
+    public void handleCompareIntervalsButtonAction(TextField textField1, TextField textField2, TextField textField3,
+            TextField textField4, TextField overlapOutputField, boolean displayAlerts) {
         // Retrieve the input values for both intervals
         String startTimeStr1 = textField1.getText().trim();
         String endTimeStr1 = textField2.getText().trim();
         String startTimeStr2 = textField3.getText().trim();
         String endTimeStr2 = textField4.getText().trim();
+
+        // Validate input formats
+        if (!isValidTimeFormat(startTimeStr1) || !isValidTimeFormat(endTimeStr1) ||
+                !isValidTimeFormat(startTimeStr2) || !isValidTimeFormat(endTimeStr2)) {
+            throw new IllegalArgumentException("Invalid time format. Please use 'HH:MM AM/PM'.");
+        }
 
         try {
             // Parse the input strings into Time objects
@@ -231,17 +251,44 @@ public class Project4 extends Application {
             }
 
         } catch (InvalidTime e) {
-            // Handle invalid time input
-            overlapOutputField.setText("Invalid time format or values. Use HH:MM AM/PM");
+            if (displayAlerts) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Invalid input");
+                alert.setContentText(e.getMessage());
+                alert.showAndWait();
+            } else {
+                // Log the error instead of showing an alert
+                System.err.println("Invalid time format or values. Use HH:MM AM/PM. " + e.getMessage());
+            }
+        } catch (IllegalArgumentException e) {
+            if (displayAlerts) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Invalid input");
+                alert.setContentText(e.getMessage());
+                alert.showAndWait();
+            } else {
+                // Log the error instead of showing an alert
+                System.err.println("Invalid time format or values. Use HH:MM AM/PM. " + e.getMessage());
+            }
         }
     }
 
     /**
-     * Handles the action for the "Check Time" button.
      * Checks if a given time is within the inputted time intervals and displays the
-     * result.
+     * result. This method handles the action for the "Check Time" button.
+     * 
+     * @param textField1         First interval start time input field
+     * @param textField2         First interval end time input field
+     * @param textField3         Second interval start time input field
+     * @param textField4         Second interval end time input field
+     * @param timeToCheckField   Field to input the time to check
+     * @param overlapOutputField Field to display the result
+     * @param displayAlerts      Whether to display alerts for invalid input
      */
-    private void handleCheckTimeButtonAction() {
+    public void handleCheckTimeButtonAction(TextField textField1, TextField textField2, TextField textField3,
+            TextField textField4, TextField timeToCheckField, TextField overlapOutputField, boolean displayAlerts) {
         // Retrieve time to check from the text field
         String timeToCheckStr = timeToCheckField.getText().trim();
 
@@ -249,6 +296,10 @@ public class Project4 extends Application {
         if (timeToCheckStr.isEmpty()) {
             overlapOutputField.setText("Please enter a time to check.");
             return;
+        }
+
+        if (!isValidTimeFormat(timeToCheckStr)) {
+            throw new IllegalArgumentException("Invalid time format. Please use 'HH:MM AM/PM'.");
         }
 
         // Parse the time to check
@@ -286,7 +337,27 @@ public class Project4 extends Application {
                 overlapOutputField.setText("Neither interval contains the time " + timeToCheck);
             }
         } catch (InvalidTime e) {
-            overlapOutputField.setText("Invalid time format or values. Use HH:MM AM/PM");
+            if (displayAlerts) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Invalid input");
+                alert.setContentText(e.getMessage());
+                alert.showAndWait();
+            } else {
+                // Log the error instead of showing an alert
+                System.err.println("Invalid time format or values. Use HH:MM AM/PM. " + e.getMessage());
+            }
+        } catch (IllegalArgumentException e) {
+            if (displayAlerts) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText("Invalid input");
+                alert.setContentText(e.getMessage());
+                alert.showAndWait();
+            } else {
+                // Log the error instead of showing an alert
+                System.err.println("Invalid time format or values. Use HH:MM AM/PM. " + e.getMessage());
+            }
         }
     }
 
@@ -302,6 +373,20 @@ public class Project4 extends Application {
         textField4.setText("");
         timeToCheckField.setText("");
         overlapOutputField.setText("");
+    }
+
+    /**
+     * Validates the format of the input time string.
+     * 
+     * @param time the time string to validate
+     * @return true if the time format is valid, false otherwise
+     */
+    private boolean isValidTimeFormat(String time) {
+        // Regex to match valid time formats like "10:30 AM" (with optional leading and
+        // trailing spaces)
+        // It does not allow extra spaces within the time itself
+        String regex = "^\\s*(\\d{1,2}):(\\d{2})\\s+(AM|PM)\\s*$";
+        return time.matches(regex);
     }
 
     /**

@@ -81,6 +81,7 @@ public class Time implements Comparable<Time> {
      */
     @Override
     public int compareTo(Time other) {
+
         // Convert both this time and the other time to a 24-hour format for comparison
         int thisMinutes = (this.hour % 12) + (this.meridian.equals("PM") ? 12 : 0);
         int otherMinutes = (other.hour % 12) + (other.meridian.equals("PM") ? 12 : 0);
