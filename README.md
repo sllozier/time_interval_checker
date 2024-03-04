@@ -4,7 +4,7 @@
 
 
 
-<i>This project 
+<i>The Time Interval Checker project is a Java application designed to facilitate the comparison and analysis of time intervals. It provides users with a convenient interface to input two time intervals and determine their relationship, including whether they overlap, one is a subinterval of the other, or if they are disjoint. The application also allows users to check if a specific time falls within the defined intervals. Key features include a user-friendly graphical interface built with JavaFX, input validation for ensuring correct time formats, and clear output messages indicating the relationship between the intervals or the presence of a specified time within them. The project leverages object-oriented principles, utilizing classes such as `Time` and `Interval` to represent time instances and intervals, respectively, while the `Project4` class serves as the main application driver. Overall, the Time Interval Checker project offers a practical solution for analyzing time intervals and aiding in time-related decision-making processes. 
 </i></p>
 
 ---
@@ -161,25 +161,25 @@ Every file that requires usage of the JavaFX modules, needs “vmArgs” in its 
 
 ## Approach
 
+My approach involved breaking down the problem into smaller tasks, such as designing the UI layout, implementing event handling for user interactions, and integrating necessary data structures for time interval comparison. I started by analyzing the project requirements and designing the UI layout using JavaFX's layout containers. Then, I implemented the logic for comparing time intervals and checking if a given time falls within the intervals. Finally, I thoroughly tested the application to ensure proper functionality and responsiveness. This step-by-step approach allowed for efficient development and ensured a well-structured and user-friendly application within the given timeframe.
 
 
 ## Assumptions
 
-
+None
 
 ## Lessons Learned
 
-Throughout the development process, several key insights were gained:
-
-
-
+Throughout the project development, several key insights were gained. First, tackling time formatting, especially in a 12-hour format while considering meridian evaluation, proved challenging. Despite multiple approaches, resolving edge cases remained elusive, highlighting the intricacies of time-related computations. Second, while conducting tests, discrepancies arose where certain tests failed to appropriately assert exceptions, emphasizing the critical need for rigorous testing to ensure robust error handling. Last, using string inputs uncovered a notable margin for user error, underscoring the importance of implementing more stringent input validation mechanisms to improve user experience and minimize data entry errors. These experiences underscored the significance of meticulous planning, thorough testing, and the continuous pursuit of user-centric design principles in software development endeavors.
 
 ## Possible Improvements
 
-To further enhance the project, the following areas can be addressed:
+Several significant improvements have been implemented to refine the functionality and usability of the application. Initially, addressing the challenge of time reformatting, I decided to convert 12-hour time inputs to 24-hour format internally which has proven effective in handling edge cases more comprehensively. This approach ensures consistency and accuracy in time comparisons, contributing to the overall reliability of the system. Moreover, testing procedures have been enhanced by integrating exception handling directly into relevant methods, resulting in more thorough test coverage and improved accuracy in identifying and handling errors. By embedding exception handling within the core functionality, the testing process becomes more streamlined and effective, facilitating the identification and resolution of potential issues. Another significant improvement involves the development of a secondary user interface option featuring combo boxes for time inputs. This alternative interface reduces the margin for user error by providing predefined values, thereby enhancing the overall usability and user experience. With combo boxes facilitating the intuitive selection of time components, users can input data more accurately and efficiently. A screenshot below showcases the secondary GUI option. These enhancements collectively contribute to a more robust and user-friendly application, aligning with best practices in software development.
 
-
-
+<details>
+<summary><b>GUI Option 2</b></summary>
+<img align="center" width="750" src="./public/GUI_two_ee.png" alt="GUI Option 2 Image Missing">
+</details>
 ---
 
 ### UML Diagram
